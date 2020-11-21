@@ -9,6 +9,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - name: Install Go
+      # Skip install if testing action locally using act
       if: ${{ !env.ACT }}
       uses: actions/setup-go@v2
       with:
@@ -16,6 +17,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
     - name: cache go mod
+      # Skip caching if testing action locally using act
       if: ${{ !env.ACT }}
       uses: actions/cache@v2
       with:
