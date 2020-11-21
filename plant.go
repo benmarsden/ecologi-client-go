@@ -93,9 +93,10 @@ func (c *Client) GetTrees(username string) (*TreeCount, error) {
 	return &treeResponse, nil
 }
 
-// GetCarbonOffset matches the GET /users/<username>/carbon-offset endpoint, allowing you to access the number of trees associated with a particular user
+// GetCarbonOffset matches the GET /users/<username>/carbon-offset endpoint, allowing you to access the number (tonnes) of carbon offsets associated with a
+// particular user
 // If successful: returns a non-nil CarbonOffsetCount
-// If unsuccessful: returns a nil TreeCount and error
+// If unsuccessful: returns nil and error
 func (c *Client) GetCarbonOffset(username string) (*CarbonOffsetCount, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/users/%s/carbon-offset", c.HostURL, username), nil)
 	if err != nil {
