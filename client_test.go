@@ -1,7 +1,6 @@
 package ecologi
 
 import (
-	"errors"
 	"net/http"
 	"testing"
 	"time"
@@ -39,17 +38,25 @@ func TestClient(t *testing.T) {
 			},
 		},
 		{
-			desc:           "empty string token",
-			host:           "https://public.ecologi.com",
-			token:          "",
-			expectedErr:    errors.New("no Ecologi API token provided"),
-			expectedClient: nil,
+			desc:        "empty string token",
+			host:        "https://public.ecologi.com",
+			token:       "",
+			expectedErr: nil,
+			expectedClient: &Client{
+				HostURL:    "https://public.ecologi.com",
+				Token:      defaultDummyAPIToken,
+				HTTPClient: &http.Client{Timeout: 10 * time.Second},
+			},
 		},
 		{
-			desc:           "nil token",
-			host:           "https://public.ecologi.com",
-			expectedErr:    errors.New("no Ecologi API token provided"),
-			expectedClient: nil,
+			desc:        "nil token",
+			host:        "https://public.ecologi.com",
+			expectedErr: nil,
+			expectedClient: &Client{
+				HostURL:    "https://public.ecologi.com",
+				Token:      defaultDummyAPIToken,
+				HTTPClient: &http.Client{Timeout: 10 * time.Second},
+			},
 		},
 	}
 

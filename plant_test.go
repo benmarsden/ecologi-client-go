@@ -32,7 +32,7 @@ func TestPlantMockResponse(t *testing.T) {
 		Amount:   0.12,
 		Currency: "USD",
 		Name:     "Customer #123",
-		TreeURL:  "https://ecologi.com/bento?tree=000000000000000000000000",
+		TreeURL:  "https://ecologi.com/" + defaultTestUsername + "?tree=000000000000000000000000",
 	}
 	defer gock.Off() // Flush pending mocks after test execution
 
@@ -43,7 +43,7 @@ func TestPlantMockResponse(t *testing.T) {
 			Amount:   0.12,
 			Currency: "USD",
 			Name:     "Customer #123",
-			TreeURL:  "https://ecologi.com/bento?tree=000000000000000000000000",
+			TreeURL:  "https://ecologi.com/" + defaultTestUsername + "?tree=000000000000000000000000",
 		})
 
 	token := defaultDummyAPIToken
@@ -59,4 +59,19 @@ func TestPlantMockResponse(t *testing.T) {
 
 	assert.Equal(t, expected, resp)
 
+}
+
+// TestPlantInvalidToken ensures that, given a valid username to c.GetTrees
+// with known tree count > 0, a tree count greater than 0 is returned by the
+// GET request
+func TestGetTrees(t *testing.T) {
+	c, err := NewClient(nil, nil)
+
+	assert.NoError(t, err)
+
+	tc, err := c.GetTrees(defaultTestUsername)
+
+	assert.NoError(t, err)
+
+	assert.Greater(t, tc.Total, 0)
 }

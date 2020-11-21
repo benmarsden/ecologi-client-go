@@ -1,7 +1,6 @@
 package ecologi
 
 import (
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -24,6 +23,7 @@ func NewClient(host *string, token *string) (*Client, error) {
 		HTTPClient: &http.Client{Timeout: 10 * time.Second},
 		// Default ecologi URL
 		HostURL: HostURL,
+		Token:   defaultDummyAPIToken,
 	}
 
 	if host != nil {
@@ -31,24 +31,16 @@ func NewClient(host *string, token *string) (*Client, error) {
 			c.HostURL = *host
 		}
 	}
-
-	if token == nil || *token == "" {
-		return nil, errors.New("no Ecologi API token provided")
+	if token != nil {
+		if *token != "" {
+			c.Token = *token
+		}
 	}
-
-	c.Token = *token
 
 	return &c, nil
 }
 
 func (c *Client) doRequest(req *http.Request) (io.ReadCloser, error) {
-
-	var bearer string = "Bearer " + c.Token
-
-	req.Header.Set("Authorization", bearer)
-	req.Header.Set("Content-Type", "application/json")
-	// TODO: Support idempotency keys
-	// req.Header.Set("Idempotency-Key", fmt.Sprint(idempKey))
 
 	res, err := c.HTTPClient.Do(req)
 
@@ -56,8 +48,16 @@ func (c *Client) doRequest(req *http.Request) (io.ReadCloser, error) {
 		return nil, fmt.Errorf("HTTP request failed: %w", err)
 	}
 
-	if res.StatusCode != http.StatusCreated {
-		return nil, fmt.Errorf("failed to create resource with HTTP response code: %d", res.StatusCode)
+	if req.Method == http.MethodPost {
+		if res.StatusCode != http.StatusCreated {
+			return nil, fmt.Errorf("failed to create resource with HTTP response code: %d", res.StatusCode)
+		}
+	}
+
+	if req.Method == http.MethodGet {
+		if res.StatusCode != http.StatusOK {
+			return nil, fmt.Errorf("failed to get resource with HTTP response code: %d", res.StatusCode)
+		}
 	}
 
 	return res.Body, nil

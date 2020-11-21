@@ -10,8 +10,8 @@ import (
 // ecologi-client-go without incurring charges
 // Assumptions:
 // 1. the returned amount is 0.12 * number
-// 2. the returned TreeURL uses mocked username `bento`, regardless of
-// the owner and validity of the input API token.
+// 2. the returned TreeURL uses mocked username from const `defaultTestUsername`,
+// regardless of the owner and validity of the input API token.
 func (c *Client) MockPlant(number int, name string, test bool) (*PlantOrderResponse, error) {
 	order := PlantOrder{
 		Number: number,
@@ -37,7 +37,7 @@ func (c *Client) MockPlant(number int, name string, test bool) (*PlantOrderRespo
 		Amount:   float64(number) * defaultTreeValue,
 		Currency: defaultCurrency,
 		Name:     name,
-		TreeURL:  "https://ecologi.com/" + defaultUsername + "?tree=000000000000000000000000",
+		TreeURL:  "https://ecologi.com/" + defaultTestUsername + "?tree=000000000000000000000000",
 	}
 
 	return &orderResponse, nil
