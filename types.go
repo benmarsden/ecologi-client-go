@@ -16,3 +16,22 @@ type PlantOrderResponse struct {
 	Name     string  `json:"name"`
 	TreeURL  string  `json:"treeURL"`
 }
+
+// TreeCount is a Go-native representation of the JSON decoding from a
+// successful response to the /users/<username>/trees endpoint
+type TreeCount struct {
+	Total int `json:"total"`
+}
+
+// CarbonOffsetCount is a Go-native representation of the JSON decoding from a
+// successful response to the /users/<username>/carbon-offset endpoint
+type CarbonOffsetCount struct {
+	Total int `json:"total"`
+}
+
+// TreeAndCarbonOffsetCount is a Go-native representation of the JSON decoding
+// from a successful response to the /users/<username>/carbon-offset endpoint
+type TreeAndCarbonOffsetCount struct {
+	TreeTotal         int `json:"trees"`
+	CarbonOffsetTotal int `json:"carbonOffset"`
+}

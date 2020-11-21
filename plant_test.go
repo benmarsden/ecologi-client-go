@@ -61,7 +61,7 @@ func TestPlantMockResponse(t *testing.T) {
 
 }
 
-// TestPlantInvalidToken ensures that, given a valid username to c.GetTrees
+// TestGetTrees ensures that, given a valid username to c.GetTrees
 // with known tree count > 0, a tree count greater than 0 is returned by the
 // GET request
 func TestGetTrees(t *testing.T) {
@@ -74,4 +74,35 @@ func TestGetTrees(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.Greater(t, tc.Total, 0)
+}
+
+// TestGetCarbonOffset ensures that, given a valid username to c.GetCarbonOffset
+// with known carbon offset count > 0, a carbon offset count greater than 0 is
+// returned by the GET request
+func TestGetCarbonOffset(t *testing.T) {
+	c, err := NewClient(nil, nil)
+
+	assert.NoError(t, err)
+
+	co, err := c.GetCarbonOffset(defaultTestUsername)
+
+	assert.NoError(t, err)
+
+	assert.Greater(t, co.Total, 0)
+}
+
+// TestGetTreesAndCarbonOffset ensures that, given a valid username to
+// c.GetCarbonOffset with known carbon offset count > 0, carbon offset and tree
+// counts greater than 0 are returned by the GET request
+func TestGetTreesAndCarbonOffset(t *testing.T) {
+	c, err := NewClient(nil, nil)
+
+	assert.NoError(t, err)
+
+	impact, err := c.GetTreesAndCarbonOffset(defaultTestUsername)
+
+	assert.NoError(t, err)
+
+	assert.Greater(t, impact.TreeTotal, 0)
+	assert.Greater(t, impact.CarbonOffsetTotal, 0)
 }
