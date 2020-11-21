@@ -9,7 +9,7 @@ import (
 // endpoint. This allows users to test their applications using
 // ecologi-client-go without incurring charges
 // Assumptions:
-// 1. the returned amount is 0.12 * number
+// 1. the returned amount is defaultTreeValue * number
 // 2. the returned TreeURL uses mocked username from const `defaultTestUsername`,
 // regardless of the owner and validity of the input API token.
 func (c *Client) MockPlant(number int, name string, test bool) (*PlantOrderResponse, error) {
